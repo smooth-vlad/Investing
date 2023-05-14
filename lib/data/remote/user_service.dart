@@ -11,7 +11,7 @@ abstract class UserService extends ChopperService {
   Future<Response<LoginResponse>> login(@Body() LoginRequest body);
 
   @Post(path: "register")
-  Future<Response<MessageResponse>> register(@Body() LoginRequest body);
+  Future<Response<LoginResponse>> register(@Body() LoginRequest body);
 
   static UserService create([ChopperClient? client]) => _$UserService(client);
 }

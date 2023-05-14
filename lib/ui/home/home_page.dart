@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chopper/chopper.dart';
 import 'package:expenses/data/remote/auth_repository.dart';
 import 'package:expenses/data/remote/crypto/get_crypto_response.dart';
@@ -17,14 +19,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Timer _timer;
   int _selectedSegment = 0;
 
   Future<Response<GetCryptoResponse>>? cryptoList;
 
   @override
   void initState() {
-    loadCryptoList();
     super.initState();
+    loadCryptoList();
+    _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+      refresh();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
   }
 
   void loadCryptoList() {
@@ -67,6 +79,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildCryptoList(Future<Response<GetCryptoResponse>>? cryptoList) {
+    loadCryptoList();
     return FutureBuilder<Response<GetCryptoResponse>>(
       future: cryptoList,
       builder: (context, snapshot) {

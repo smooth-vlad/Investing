@@ -30,7 +30,7 @@ class _$UserService extends UserService {
   }
 
   @override
-  Future<Response<MessageResponse>> register(LoginRequest body) {
+  Future<Response<LoginResponse>> register(LoginRequest body) {
     final Uri $url = Uri.parse('/api/user/register');
     final $body = body;
     final Request $request = Request(
@@ -39,6 +39,6 @@ class _$UserService extends UserService {
       client.baseUrl,
       body: $body,
     );
-    return client.send<MessageResponse, MessageResponse>($request);
+    return client.send<LoginResponse, LoginResponse>($request);
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
+import 'package:expenses/data/remote/message_response.dart';
 
 typedef JsonFactory<T> = T Function(Map<String, dynamic> json);
 
@@ -55,7 +56,7 @@ class JsonSerializableConverter extends JsonConverter {
     final jsonRes = await super.convertError(response);
 
     return jsonRes.copyWith<String>(
-      body: jsonRes.body,
+      body: _decode<MessageResponse>(jsonRes.body),
     );
   }
 

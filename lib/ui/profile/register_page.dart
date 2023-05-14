@@ -1,5 +1,9 @@
+import 'package:expenses/data/remote/auth_repository.dart';
+import 'package:expenses/data/remote/expenses_client.dart';
+import 'package:expenses/data/remote/user/login_request.dart';
 import 'package:expenses/ui/profile/login_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -9,6 +13,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _loginController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -38,20 +45,24 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 64),
-                const CupertinoTextField(
+                CupertinoTextField(
+                  controller: _loginController,
                   placeholder: 'Почта',
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                 ),
                 const SizedBox(height: 24),
-                const CupertinoTextField(
+                CupertinoTextField(
+                  controller: _passwordController,
                   placeholder: 'Пароль',
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   obscureText: true,
                 ),
                 const SizedBox(height: 24),
                 CupertinoButton.filled(
                   child: const Text('Создать аккаунт'),
-                  onPressed: () {},
+                  onPressed: () {
+                    _register();
+                  },
                 ),
                 const SizedBox(height: 12),
                 CupertinoButton(
@@ -79,5 +90,27 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  void _register() {
+    final login = _loginController.text;
+    final password = _passwordController.text;
+
+    if (login.isEmpty || password.isEmpty) {
+      // TODO show error
+      return;
+    }
+
+    context
+        .read<ExpensesClient>()
+        .getUserService()
+        .register(LoginRequest(login: login, password: password))
+        .then((value) {
+      if (value.body?.token != null) {
+        context.read<AuthRepository>().setToken(value.body!.token);
+      } else {
+        print(value.error);
+      }
+    });
   }
 }

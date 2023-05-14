@@ -1,4 +1,5 @@
 import 'package:expenses/data/remote/auth_repository.dart';
+import 'package:expenses/ui/profile/profile_container_page.dart';
 import 'package:expenses/ui/profile/register_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class _AppNavigationState extends State<AppNavigation> {
   final List<Widget> _pages = <Widget>[
     const HomePage(),
     const Placeholder(),
-    const RegisterPage(),
+    const ProfileContainerPage(),
   ];
 
   int _selectedIndex = 0;
